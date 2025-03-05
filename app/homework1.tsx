@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import { Calendar } from "react-native-calendars";
 
 const zodiacSigns = [
@@ -17,25 +17,43 @@ const zodiacSigns = [
   "Střelec",
 ];
 const breakDates = [20, 19, 20, 20, 21, 21, 22, 22, 22, 23, 22, 21];
+const zodiacImages: Record<string, any> = {
+  Kozoroh: require("../assets/images/kozoroh.png"),
+  Vodnář: require("../assets/images/vodnar.png"),
+  Ryby: require("../assets/images/ryby.png"),
+  Beran: require("../assets//images/beran.png"),
+  Býk: require("../assets/images/byk.png"),
+  Blíženci: require("../assets/images/blizenci.png"),
+  Rak: require("../assets/images/rak.png"),
+  Lev: require("../assets/images/lev.png"),
+  Panna: require("../assets/images/panna.png"),
+  Váhy: require("../assets/images/vahy.png"),
+  Štír: require("../assets/images/stir.png"),
+  Střelec: require("../assets/images/strelec.png"),
+};
+
+const importantDates = [
+  { name: "Konec semestru", date: "2025-05-17", color: "red" },
+  { name: "Vědecká rada", date: "2025-03-26", color: "green" },
+  { name: "Sportovní den", date: "2025-04-23", color: "blue" },
+];
+
+const getDaysLeft = (targetDateString: string) => {
+  const today = new Date();
+  const targetDate = new Date(targetDateString);
+  const diff = Math.ceil(
+    (targetDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  return diff;
+};
 
 export default function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
   const [zodiacSign, setZodiacSign] = useState<string | null>(null);
 
-  const importantDates = [
-    { name: "Konec semestru", date: "2025-05-17", color: "red" },
-    { name: "Vědecká rada", date: "2025-03-26", color: "green" },
-    { name: "Sportovní den", date: "2025-04-23", color: "blue" },
-  ];
-
   const calculateDaysToGo = (date: string) => {
-    const today = new Date();
-    const targetDate = new Date(date);
-    const diff = Math.ceil(
-      (targetDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    setDaysRemaining(diff);
+    setDaysRemaining(getDaysLeft(date));
   };
 
   const getZodiacSign = (date: string) => {
@@ -44,14 +62,23 @@ export default function CalendarScreen() {
     const month = selected.getMonth();
 
     if (day < breakDates[month]) {
-      setZodiacSign(zodiacSigns[month === 0 ? 11 : month - 1]);
-    } else {
       setZodiacSign(zodiacSigns[month]);
+    } else {
+      setZodiacSign(zodiacSigns[(month + 1) % 12]);
     }
   };
 
+  const handleDayPress = (day: any) => {
+    setSelectedDate(day.dateString);
+    calculateDaysToGo(day.dateString);
+    getZodiacSign(day.dateString);
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
       <Text style={styles.title}>Termíny</Text>
 
       <View style={styles.card}>
@@ -61,45 +88,97 @@ export default function CalendarScreen() {
       </View>
 
       <View style={styles.card}>
-        {importantDates.map((event, index) => (
-          <Text key={index} style={{ color: event.color, fontSize: 16 }}>
-            ● {event.name}: {event.date}
-          </Text>
-        ))}
+        <Text style={styles.header}>Důležité události</Text>
+        {importantDates.map((event, index) => {
+          const daysLeft = getDaysLeft(event.date);
+          return (
+            <View style={styles.eventRow} key={index}>
+              <View
+                style={[styles.colorDot, { backgroundColor: event.color }]}
+              />
+              <Text style={styles.eventText}>
+                {event.name}:
+                <Text style={styles.daysText}>
+                  {" "}
+                  {daysLeft > 0 ? daysLeft : 0} dní{" "}
+                </Text>
+                <Text>[{event.date}]</Text>
+              </Text>
+            </View>
+          );
+        })}
       </View>
 
       <View style={styles.card}>
         <Text style={styles.header}>Zadej datum</Text>
         <Calendar
-          onDayPress={(day) => {
-            setSelectedDate(day.dateString);
-            calculateDaysToGo(day.dateString);
-            getZodiacSign(day.dateString);
-          }}
+          onDayPress={handleDayPress}
+          markingType="custom"
           markedDates={{
             [selectedDate || ""]: { selected: true, selectedColor: "#007AFF" },
+            "2025-05-17": {
+              customStyles: {
+                container: {
+                  backgroundColor: "red",
+                },
+                text: {
+                  color: "white",
+                  fontWeight: "bold",
+                },
+              },
+            },
+            "2025-03-26": {
+              customStyles: {
+                container: {
+                  backgroundColor: "green",
+                },
+                text: {
+                  color: "white",
+                  fontWeight: "bold",
+                },
+              },
+            },
+            "2025-04-23": {
+              customStyles: {
+                container: {
+                  backgroundColor: "blue",
+                },
+                text: {
+                  color: "white",
+                  fontWeight: "bold",
+                },
+              },
+            },
           }}
         />
-
-        {selectedDate && (
-          <>
-            <Text style={styles.result}>Vybrané datum: {selectedDate}</Text>
-            <Text style={styles.result}>
-              Počet dní do zvoleného data: {daysRemaining}
-            </Text>
-            <Text style={styles.result}>Znamení zvěrokruhu: {zodiacSign}</Text>
-          </>
-        )}
       </View>
-    </View>
+      {selectedDate && (
+        <View style={styles.card}>
+          <Text style={styles.result}>Vybrané datum: {selectedDate}</Text>
+          <Text style={styles.result}>
+            Počet dní do zvoleného data: {daysRemaining}
+          </Text>
+          <Text style={styles.result}>Znamení zvěrokruhu: {zodiacSign}</Text>
+          {zodiacSign && (
+            <Image
+              source={zodiacImages[zodiacSign]}
+              style={styles.zodiacImage}
+            />
+          )}
+        </View>
+      )}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: "#f5f5f5",
+  },
+  contentContainer: {
+    padding: 20,
+    paddingBottom: 40,
   },
   title: {
     fontSize: 24,
@@ -122,11 +201,37 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 18,
     fontWeight: "bold",
-    textAlign: "center",
     marginBottom: 10,
+    textAlign: "center",
+  },
+  eventRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
+  },
+  colorDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 8,
+    marginRight: 8,
+  },
+  eventText: {
+    fontSize: 16,
+    color: "#333",
   },
   result: {
     fontSize: 16,
     marginTop: 5,
+  },
+  daysText: {
+    fontSize: 16,
+    color: "#333",
+    fontWeight: "bold",
+  },
+  zodiacImage: {
+    width: 150,
+    height: 150,
+    marginTop: 10,
+    alignSelf: "center",
   },
 });

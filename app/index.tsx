@@ -33,9 +33,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    paddingTop: 50,
+    paddingTop: 10,
   },
   buttonContainer: {
-    marginTop: 50,
+    marginTop: 25,
   },
 });
