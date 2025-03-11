@@ -42,7 +42,7 @@ export default function Homework() {
       <KeyboardAvoidingView
         style={styles.container}
         behavior="padding"
-        keyboardVerticalOffset={100}>
+        keyboardVerticalOffset={110}>
         <Text style={styles.title}>Local Storage</Text>
         <ItemList items={items} removeItem={removeItem} />
         <InputBar addItem={addItem} removeAll={removeAll} />
