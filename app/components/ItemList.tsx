@@ -13,12 +13,22 @@ interface Props {
   removeItem: (index: number) => void;
 }
 
+const getBackgroundColor = (text: string) => {
+  if (/\d/.test(text)) return "#FF206E";
+  if (/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(text)) return "#FBFF12";
+  return "#41EAD4";
+};
+
 const ItemList: React.FC<Props> = ({ items, removeItem }) => {
   return (
     <FlatList
       data={items}
       renderItem={({ item, index }) => (
-        <View style={styles.itemContainer}>
+        <View
+          style={[
+            styles.itemContainer,
+            { backgroundColor: getBackgroundColor(item) },
+          ]}>
           <Text style={styles.itemText}>{item}</Text>
           <TouchableOpacity
             onPress={() => removeItem(index)}
@@ -37,7 +47,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#fff",
     padding: 15,
     marginVertical: 5,
     borderRadius: 10,
@@ -46,7 +55,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 3,
   },
-  itemText: { fontSize: 18 },
+  itemText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
   trashButton: {
     backgroundColor: "#407BFF",
     padding: 10,
