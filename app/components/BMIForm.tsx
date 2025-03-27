@@ -50,7 +50,6 @@ const BMIForm: React.FC<Props> = ({ onCalculate }) => {
 
   const RadioOption = ({
     label,
-    value,
     selected,
     onPress,
   }: {
@@ -145,7 +144,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
-    elevation: 2,
   },
   input: {
     borderWidth: 1,
