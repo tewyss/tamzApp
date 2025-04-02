@@ -27,6 +27,11 @@ export default function HomeScreen() {
         onPress={() => router.push("/homework4")}
         style={styles.buttonContainer}
       />
+      <CustomButton
+        title="HomeWork 5"
+        onPress={() => router.push("/homework5")}
+        style={styles.buttonContainer}
+      />
     </View>
   );
 }

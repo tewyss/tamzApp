@@ -1,0 +1,28 @@
+export const texts = {
+  en: {
+    title: "CNB Exchange Rates",
+    amountLabel: "CZK",
+    amountPlaceholder: "Enter amount in CZK",
+    currencyLabel: "Select Currency",
+    convert: "Convert",
+    dateLabel: "Select Date",
+    resultLabel: "Result:",
+    alertTitle: "Invalid amount",
+    alertMessage: "Enter an amount greater than 0.",
+    cancel: "Cancel",
+    searchPlaceholder: "Search currency...",
+  },
+  cs: {
+    title: "Směnné kurzy ČNB",
+    amountLabel: "CZK",
+    amountPlaceholder: "Zadej částku v CZK",
+    currencyLabel: "Vyber měnu",
+    convert: "Převést",
+    dateLabel: "Vyber datum",
+    resultLabel: "Výsledek:",
+    alertTitle: "Neplatná částka",
+    alertMessage: "Zadej částku větší než 0.",
+    cancel: "Zrušit",
+    searchPlaceholder: "Hledat měnu...",
+  },
+};
