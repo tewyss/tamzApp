@@ -11,6 +11,7 @@ export const texts = {
     alertMessage: "Enter an amount greater than 0.",
     cancel: "Cancel",
     searchPlaceholder: "Search currency...",
+    graphTitle: "Currency Rate Over Time",
   },
   cs: {
     title: "Směnné kurzy ČNB",
@@ -24,5 +25,6 @@ export const texts = {
     alertMessage: "Zadej částku větší než 0.",
     cancel: "Zrušit",
     searchPlaceholder: "Hledat měnu...",
+    graphTitle: "Historie směnného kurzu",
   },
 };

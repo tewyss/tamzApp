@@ -4,8 +4,10 @@ import CurrencyInput from "./components/CurrencyInput";
 import ExchangeResult from "./components/ExchangeResult";
 import {
   fetchExchangeRates,
+  fetchCurrencyHistory,
   convertCurrency,
   CurrencyData,
+  Point,
 } from "../utils/exchange";
 import CustomButton from "./components/CustomButton";
 import CalendarSelectorModal from "./components/CalendarSelectorModal";
@@ -14,6 +16,7 @@ import { Alert } from "react-native";
 import LangSwitcher from "./LangSwitcher";
 import { texts } from "../utils/locales";
 import CoinAnimation from "./components/CoinAnimation";
+import CurrencyGraph from "./components/CurrencyGraph";
 
 const Homework5 = () => {
   const [amount, setAmount] = useState("100");
@@ -27,6 +30,7 @@ const Homework5 = () => {
   const [lang, setLang] = useState<"cs" | "en">("en");
   const t = texts[lang];
   const [animateCoin, setAnimateCoin] = useState(false);
+  const [history, setHistory] = useState<Point[]>([]);
 
   useEffect(() => {
     const loadRates = async () => {
@@ -59,6 +63,11 @@ const Homework5 = () => {
     );
     setResult(converted);
   };
+  const handleCurrencySelect = async (code: string) => {
+    setSelectedCurrency(code);
+    const data = await fetchCurrencyHistory(code, lang);
+    setHistory(data);
+  };
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
@@ -78,7 +87,7 @@ const Homework5 = () => {
       <CurrencyPickerModal
         currencies={rates}
         selectedCode={selectedCurrency}
-        onSelect={setSelectedCurrency}
+        onSelect={handleCurrencySelect}
         labelText={t.currencyLabel}
         searchPlaceholder={t.searchPlaceholder}
         cancelText={t.cancel}
@@ -95,6 +104,7 @@ const Homework5 = () => {
         currencyCode={selectedCurrency}
         label={t.resultLabel}
       />
+      {history.length > 0 && <CurrencyGraph data={history} lang={lang} />}
     </ScrollView>
   );
 };
