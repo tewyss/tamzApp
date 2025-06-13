@@ -14,7 +14,7 @@ Each button opens a specific homework task inside the app.
 ## 🚀 Technology
 
 - React Native
-- TypeScript / JavaScript
+- TypeScript
 - Expo
 
 ## ▶️ Run the app
