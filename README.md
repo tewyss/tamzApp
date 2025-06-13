@@ -1,6 +1,6 @@
 # TAMZ – School Homeworks
 
-This repository contains my school homeworks from the subject **TAMZ**, which focuses mainly on building mobile applications using **React Native**, **JavaScript**, and **TypeScript**.
+This repository contains my school homeworks from the subject **TAMZ**, which focuses mainly on building mobile applications using **React Native** and **TypeScript**.
 
 ## 🧠 About
 
